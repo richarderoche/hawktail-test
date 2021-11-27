@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hawktail</title>
+  <link rel="stylesheet" href="style.css">
+
+  <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+<body x-data="{locX : 0, locY : 0, cursorHover: false}">
+
+  <div id="wrapper" @mousemove.debounce.5ms='function(e){locX=$event.clientX + `px`; locY=$event.clientY + `px`;}'>
+    
+    <div class="spotlight" :style="`left: ${locX}; top: ${locY};`">
+    </div>
+
+    <img class="bg-img" src="/bg.jpg" alt="" >
+
+    <div class="logo" @mouseenter="cursorHover = true" @mouseleave="cursorHover = false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="297.41528" height="35.53613" viewBox="0 0 297.41528 35.53613">
+        <g id="Layer_2" data-name="Layer 2">
+          <g id="Layer_1-2" data-name="Layer 1">
+            <path
+              d="M0,0H5.48267V14.9248H25.17993V0H30.6626V35.53613H25.17993V19.84961H5.48267V35.53613H0ZM67.06641,28.7334H47.31836L44.3739,35.53613H38.43433L54.42554,0H59.9082L75.89966,35.53613H70.01074Zm-2.08155-4.77149L57.21777,6.14258h-.10156L49.39978,23.96191ZM78.8479,0h5.68579l6.498,27.9209h.10156L101.4895,0h5.229l10.407,27.9209h.10156L123.67432,0h5.68579l-8.37647,35.53613H114.7395l-10.61011-27.667h-.10156l-10.61011,27.667H87.22437Zm61.07788,0h5.48267V17.91992H145.51L162.5166,0h7.66577L155.15552,15.38184l15.636,20.15429h-6.80273L151.44971,19.08789h-.10157l-5.93969,6.29492V35.53613h-5.48267ZM189.7312,4.92383H176.58276V0H208.3623V4.92383H195.21387v30.6123H189.7312ZM237.25146,28.7334h-19.748l-2.94434,6.80273h-5.9397L224.6106,0h5.48266l15.99146,35.53613H240.1958Zm-2.08154-4.77149L227.40283,6.14258h-.10156l-7.71655,17.81933ZM253.856,0h5.48266V35.53613H253.856Zm18.73486,0h5.48267V30.6123h19.34179v4.92383H272.59082Z"
+              style="fill: currentColor" />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <div class="cursor" :style="`left: ${locX}; top: ${locY};`" :class="{'hovered' : cursorHover}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90">
+      <g id="cursor-wrap" data-name="Layer 2">
+        <g id="cursor-outer" data-name="Layer 1">
+          <path
+            d="M40.8165,90V68.15134L56.266,83.60062,40.8165,90m8.367-90V21.84866L33.73405,6.39938,49.1835,0M16.13838,10.222,31.58771,25.67135,9.739,25.67147,16.13838,10.222M73.86162,79.778,58.41229,64.32865l21.8487-.00012L73.86162,79.778M0,40.8165H21.84866L6.39938,56.266,0,40.8165m90,8.367H68.15134L83.60062,33.73405,90,49.1835M10.222,73.86162,25.67135,58.41229l.00012,21.8487L10.222,73.86162M79.778,16.13838,64.32865,31.58771,64.32853,9.739,79.778,16.13838"
+            style="fill: #eaffdc" />
+        </g>
+        <g id="cursor-dot">
+          <circle cx="45.00003" cy="45.00016" r="4.5" style="fill: currentColor" />
+          <path d="M45.00015,40.99991a4,4,0,1,1-4,4,4.0002,4.0002,0,0,1,4-4m0-1a5,5,0,1,0,5,5,5.00573,5.00573,0,0,0-5-5Z"
+            style="fill: #dddedf" />
+        </g>
+      </g>
+    </svg>
+
+  </div>
+
+  <style>
+    * {cursor: none;}
+
+    body, html {
+      color: color: rgb(45, 48, 50);
+    }
+
+    .cursor {
+      position: fixed;
+      width: 90x;
+      height: 90px;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transform-origin: center; 
+    }
+
+    #cursor-outer {
+      opacity: 0;
+      transform-origin: center;
+      transform: scale(.1);
+      transition: all 0.25s ease-in-out;
+    }
+
+    .cursor.hovered #cursor-wrap {
+      opacity: 1;
+      transform-origin: center;
+      animation: rotate 3.5s linear infinite;
+    }
+
+    .cursor.hovered #cursor-dot {
+      opacity: 0;
+      transition: all 0.2s ease-in-out;
+    }
+
+    @keyframes rotate {
+      0% { 
+        transform: rotate(0);
+      }
+      100% { 
+        transform: rotate(360deg);
+      }
+    }
+
+    .cursor.hovered #cursor-outer {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    #wrapper {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background-color: rgb(221,222,223);
+    }
+
+    .spotlight {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 200%;
+      height: 200%;
+      transform: translate(-50%, -50%);
+      background: rgb(255,243,237);
+      background: radial-gradient(circle, rgba(255,233,222) 0%, rgba(221,222,223,0) 38%);
+      transition: all .7s linear;
+    }
+
+    .bg-img {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100vw;
+      mix-blend-mode: multiply;
+      opacity: .25;
+    }
+
+    .logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 25vw;
+      height: auto;
+    }
+
+    .logo svg {width: 100%;}
+
+
+  </style>
+
+  
+  
+</body>
+</html>
