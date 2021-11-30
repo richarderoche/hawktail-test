@@ -8,12 +8,16 @@
   <link rel="stylesheet" href="style.css">
 
   <script src="//unpkg.com/alpinejs" defer></script>
+
 </head>
 <body x-data="{locX : -30, locY : -30, cursorHover: false}">
 
-  <div id="wrapper" @mousemove.debounce.5ms='function(e){locX=$event.clientX + `px`; locY=$event.clientY + `px`;}'>
+  <div id="wrapper" @mousemove.debounce.5ms='
+    function(e){locX=$event.clientX + `px`; locY=$event.clientY + `px`;}
+    gradPos($event.clientY);'
+  >
     
-    <div class="spotlight" :style="`foo: ${locX};`">
+    <div id="spotlight">
     </div>
 
     <img class="bg-img" src="/img/bg.jpg" alt="" >
@@ -58,8 +62,8 @@
       </svg>
     </div>
     
-    <div class="logo" @mouseenter="cursorHover = true" @mouseleave="cursorHover = false">
-      <svg xmlns="http://www.w3.org/2000/svg" width="546.39923" height="66.36815" viewBox="0 0 546.39923 66.36815">
+    <div class="logo">
+      <svg class="main" xmlns="http://www.w3.org/2000/svg" width="546.39923" height="66.36815" viewBox="0 0 546.39923 66.36815">
         <g id="Layer_2" data-name="Layer 2">
           <g id="Layer_1-2" data-name="Layer 1">
             <path
@@ -67,6 +71,12 @@
               style="fill: currentColor" />
           </g>
         </g>
+      </svg>
+
+      <svg class="alt" xmlns="http://www.w3.org/2000/svg" width="546.3992" height="66.89162" viewBox="0 0 546.3992 66.89162">
+        <path
+          d="M47.02635.51546H57.2659v66.368H47.02635V37.58668H10.23955V66.88347H0V.51546H10.23955V28.38992h36.7868ZM216.06994,52.66159h-.18954L196.44409.51546H186.6785L167.33707,52.66159h-.18976L155.01147.51546H144.39285l15.64374,66.368h11.567L191.4192,15.2113h.18954l19.81561,51.67217H223.086L238.73.51546H228.11112ZM317.114.51546H302.79764L271.03573,33.98388H270.846V.51546H260.60642v66.368H270.846V47.92111l11.093-11.7563h.18976L305.547,66.88347h12.70467l-29.2019-37.64006Zm147.14,66.368h10.23955V.51546H464.25394ZM329.30776,9.71222h20.70819V66.88347H360.2555V9.71222h20.70818V.51546H329.30776ZM514.12425,57.68671V.51546H503.8847v66.368h42.5145V57.68671ZM72.83981,66.89162,98.84,4.12117a6.66219,6.66219,0,0,1,12.31015,0l26.0002,62.77045ZM91.33355,22.24355a12.12982,12.12982,0,1,0,6.56462,15.84837A12.12981,12.12981,0,0,0,91.33355,22.24355Zm293.04422,44.6396L410.378,4.1127a6.66221,6.66221,0,0,1,12.31016,0l26.00019,62.77045Zm60.55432-37.68493c-2.20811-1.64151-3.62805-6.48577-10.09461-6.48577-6.46724,0-7.8865,4.845-10.09461,6.48577-4.0506,3.01068-6.43843,4.24336-6.43843,8.368a6.60376,6.60376,0,0,0,6.60375,6.60444h19.85515a6.60581,6.60581,0,0,0,6.60512-6.6065C451.36846,33.44158,448.982,32.20822,444.93209,29.19822Z"
+          style="fill: currentColor" />
       </svg>
 
     </div>
@@ -177,13 +187,12 @@
       background-color: rgb(221,222,223);
     }
 
-    .spotlight {
+    #spotlight {
       position: absolute;
       top: 0;
       left: 0;
       bottom: 0;
       right: 0;
-      background: rgb(220,221,222);
       background: linear-gradient(0deg, rgba(220,221,222,1) 20%, rgba(255,219,196,1) 100%);
       transition: all .7s linear;
     }
@@ -206,6 +215,16 @@
       height: auto;
     }
 
+    .logo .alt {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    .logo:hover .main {opacity: 0;}
+    .logo:hover .alt {opacity: 1;}
+
     svg {width: 100%;}
 
     
@@ -213,7 +232,16 @@
 
   </style>
 
-  
+  <script>
+    const wrapper = document.getElementById('wrapper');
+    function gradPos(cursor) {
+      let wrapH = wrapper.offsetHeight;
+      let cursorPos = 60 - (cursor / wrapH * 100) + "%";
+      console.log(wrapH + ", ", cursorPos);
+      let bg = document.getElementById('spotlight');
+      bg.style.background = "linear-gradient(0deg, rgba(220,221,222,1) " + cursorPos + ", rgba(255,219,196,1) 100%)";
+    }
+  </script>
   
 </body>
 </html>
